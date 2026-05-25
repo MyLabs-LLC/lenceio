@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>lence.io — AI & Data Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#06070a;
+  --ink2:#0d0f14;
+  --ink3:#13161d;
+  --ink4:#1c2029;
+  --line:rgba(255,255,255,0.06);
+  --line2:rgba(255,255,255,0.1);
+  --txt:#e8eaf0;
+  --txt2:rgba(232,234,240,0.5);
+  --txt3:rgba(232,234,240,0.25);
+  --accent:#818cf8;
+  --accent2:#6366f1;
+  --accent-glow:rgba(99,102,241,0.15);
+  --accent-glow2:rgba(99,102,241,0.06);
+  --green:#34d399;
+  --r:6px;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--ink);
+  color:var(--txt);
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* DOT GRID */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,0.08) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 0%,black 40%,transparent 100%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* MOUSE SPOTLIGHT */
+#spotlight{
+  position:fixed;
+  width:600px;
+  height:600px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,0.08) 0%,transparent 70%);
+  pointer-events:none;
+  z-index:1;
+  transform:translate(-50%,-50%);
+  transition:opacity 0.3s;
+  opacity:0;
+}
+
+/* NAV */
+nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:200;
+  padding:0 2rem;
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid transparent;
+  transition:border-color 0.3s,background 0.3s,backdrop-filter 0.3s;
+}
+nav.scrolled{
+  border-color:var(--line);
+  background:rgba(6,7,10,0.8);
+  backdrop-filter:blur(20px);
+}
+
+.logo{
+  font-size:1rem;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  color:var(--txt);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.logo-dot{
+  width:7px;height:7px;
+  border-radius:50%;
+  background:var(--accent2);
+  animation:pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(0.8)}
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:2rem;
+}
+.nav-link{
+  font-size:0.8rem;
+  font-weight:500;
+  color:var(--txt2);
+  text-decoration:none;
+  letter-spacing:0.01em;
+  transition:color 0.2s;
+}
+.nav-link:hover{color:var(--txt)}
+
+.nav-btn{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem;
+  font-weight:500;
+  color:var(--ink);
+  background:var(--txt);
+  padding:0.45rem 1.1rem;
+  border-radius:4px;
+  text-decoration:none;
+  letter-spacing:0.02em;
+  transition:opacity 0.2s;
+  white-space:nowrap;
+}
+.nav-btn:hover{opacity:0.85}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 6rem;
+  position:relative;
+  z-index:2;
+}
+
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;
+  color:var(--accent);
+  border:1px solid rgba(99,102,241,0.25);
+  background:rgba(99,102,241,0.06);
+  padding:0.35rem 0.85rem;
+  border-radius:100px;
+  margin-bottom:2.5rem;
+  opacity:0;
+  animation:fadeUp 0.7s 0.2s ease-out forwards;
+  letter-spacing:0.05em;
+}
+.badge-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--green);
+  animation:pulse 2s infinite;
+}
+
+.hero-h1{
+  font-size:clamp(3rem,7vw,6.5rem);
+  font-weight:900;
+  line-height:0.95;
+  letter-spacing:-0.04em;
+  max-width:900px;
+  opacity:0;
+  animation:fadeUp 0.8s 0.4s ease-out forwards;
+}
+
+.grad{
+  background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-sub{
+  font-size:clamp(0.9rem,1.5vw,1.1rem);
+  font-weight:400;
+  color:var(--txt2);
+  max-width:520px;
+  line-height:1.75;
+  margin-top:2rem;
+  opacity:0;
+  animation:fadeUp 0.8s 0.6s ease-out forwards;
+}
+
+.hero-ctas{
+  display:flex;
+  gap:1rem;
+  margin-top:2.5rem;
+  opacity:0;
+  animation:fadeUp 0.8s 0.8s ease-out forwards;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.cta-primary{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.8rem;
+  font-weight:500;
+  color:var(--ink);
+  background:var(--txt);
+  padding:0.8rem 1.8rem;
+  border-radius:5px;
+  text-decoration:none;
+  letter-spacing:0.02em;
+  transition:opacity 0.2s,transform 0.2s;
+}
+.cta-primary:hover{opacity:0.88;transform:translateY(-1px)}
+
+.cta-ghost{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.8rem;
+  font-weight:400;
+  color:var(--txt2);
+  padding:0.8rem 1.8rem;
+  border-radius:5px;
+  border:1px solid var(--line2);
+  text-decoration:none;
+  letter-spacing:0.02em;
+  transition:color 0.2s,border-color 0.2s,transform 0.2s;
+}
+.cta-ghost:hover{color:var(--txt);border-color:rgba(255,255,255,0.2);transform:translateY(-1px)}
+
+/* HERO STATS ROW */
+.hero-stats{
+  display:flex;
+  gap:0;
+  margin-top:5rem;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  overflow:hidden;
+  opacity:0;
+  animation:fadeUp 0.8s 1s ease-out forwards;
+}
+.hstat{
+  padding:1.25rem 2.5rem;
+  border-right:1px solid var(--line);
+  text-align:center;
+  background:var(--ink2);
+  transition:background 0.2s;
+}
+.hstat:last-child{border-right:none}
+.hstat:hover{background:var(--ink3)}
+.hstat-n{
+  font-size:1.8rem;
+  font-weight:800;
+  letter-spacing:-0.03em;
+  line-height:1;
+}
+.hstat-l{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  color:var(--txt3);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-top:0.35rem;
+}
+
+/* SECTION COMMON */
+section{position:relative;z-index:2}
+
+.section-wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:6rem 2rem;
+}
+
+.s-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:1rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.s-label::before{
+  content:'';
+  width:20px;height:1px;
+  background:var(--accent);
+  opacity:0.5;
+}
+
+.s-heading{
+  font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:800;
+  letter-spacing:-0.03em;
+  line-height:1.05;
+}
+
+/* DIVIDER */
+.div{
+  height:1px;
+  background:var(--line);
+  position:relative;
+  z-index:2;
+}
+
+/* BENTO GRID — SERVICES */
+.bento{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:auto;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:3rem;
+}
+
+.bc{ /* bento cell */
+  background:var(--ink2);
+  padding:2rem;
+  position:relative;
+  overflow:hidden;
+  transition:background 0.25s;
+}
+.bc:hover{background:var(--ink3)}
+.bc::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(99,102,241,0.07),transparent 60%);
+  opacity:0;
+  transition:opacity 0.3s;
+  pointer-events:none;
+}
+.bc:hover::before{opacity:1}
+
+.bc-1{grid-column:span 4}
+.bc-2{grid-column:span 2}
+.bc-3{grid-column:span 2}
+.bc-4{grid-column:span 2}
+.bc-5{grid-column:span 2}
+.bc-6{grid-column:span 4}
+.bc-7{grid-column:span 6}
+
+.bc-icon{
+  font-size:1.5rem;
+  margin-bottom:1.5rem;
+  display:block;
+  line-height:1;
+}
+
+.bc-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;
+  color:var(--txt3);
+  letter-spacing:0.12em;
+  margin-bottom:1.2rem;
+}
+
+.bc-title{
+  font-size:1.15rem;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  margin-bottom:0.8rem;
+  line-height:1.2;
+}
+.bc-1 .bc-title{font-size:1.5rem}
+
+.bc-body{
+  font-size:0.82rem;
+  line-height:1.7;
+  color:var(--txt2);
+  font-weight:400;
+}
+
+.bc-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  margin-top:1.2rem;
+}
+.tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.06em;
+  color:var(--txt3);
+  border:1px solid var(--line2);
+  padding:0.2rem 0.5rem;
+  border-radius:3px;
+}
+
+/* FEATURED CARD */
+.bc.featured{
+  background:linear-gradient(135deg,var(--ink3) 0%,rgba(99,102,241,0.08) 100%);
+  border:none;
+}
+.bc.featured .bc-title{font-size:1.35rem}
+
+/* HERO BENTO — wide cell for AI */
+.ai-terminal{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem;
+  color:var(--txt2);
+  background:var(--ink);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:1rem 1.2rem;
+  margin-top:1.5rem;
+  line-height:1.9;
+}
+.ai-terminal .prompt{color:var(--accent)}
+.ai-terminal .output{color:var(--green)}
+
+/* CREDENTIALS */
+.cred-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:3rem;
+}
+
+.cred-card{
+  background:var(--ink2);
+  padding:2rem;
+  display:flex;
+  flex-direction:column;
+  gap:0.5rem;
+  transition:background 0.2s;
+  position:relative;
+  overflow:hidden;
+}
+.cred-card:hover{background:var(--ink3)}
+
+.cred-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:0.08em;
+  padding:0.25rem 0.6rem;
+  border-radius:3px;
+  margin-bottom:0.5rem;
+  width:fit-content;
+}
+.cred-badge.current{
+  background:rgba(52,211,153,0.08);
+  color:var(--green);
+  border:1px solid rgba(52,211,153,0.2);
+}
+.cred-badge.past{
+  background:var(--ink3);
+  color:var(--txt3);
+  border:1px solid var(--line);
+}
+.cred-badge.cert{
+  background:rgba(99,102,241,0.1);
+  color:var(--accent);
+  border:1px solid rgba(99,102,241,0.2);
+}
+
+.cred-org{
+  font-size:1.15rem;
+  font-weight:700;
+  letter-spacing:-0.02em;
+}
+.cred-role{
+  font-size:0.82rem;
+  color:var(--txt2);
+  line-height:1.5;
+}
+.cred-period{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  color:var(--txt3);
+  margin-top:auto;
+  padding-top:1rem;
+}
+
+/* SKILLS */
+.skills-cloud{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.5rem;
+  margin-top:2.5rem;
+}
+.skill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem;
+  letter-spacing:0.04em;
+  color:var(--txt2);
+  border:1px solid var(--line2);
+  padding:0.45rem 0.9rem;
+  border-radius:100px;
+  transition:color 0.2s,border-color 0.2s,background 0.2s;
+  cursor:default;
+}
+.skill:hover{
+  color:var(--txt);
+  border-color:rgba(99,102,241,0.4);
+  background:rgba(99,102,241,0.06);
+}
+
+/* CTA SECTION */
+.cta-wrap{
+  text-align:center;
+  padding:8rem 2rem;
+  position:relative;
+  z-index:2;
+}
+.cta-glow-ring{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:700px;height:400px;
+  background:radial-gradient(ellipse,rgba(99,102,241,0.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-wrap .s-label{justify-content:center}
+.cta-wrap .s-label::before{display:none}
+
+.cta-h{
+  font-size:clamp(2.5rem,5vw,5rem);
+  font-weight:900;
+  letter-spacing:-0.04em;
+  line-height:0.95;
+  margin:1rem 0 1.5rem;
+}
+.cta-sub{
+  font-size:0.95rem;
+  color:var(--txt2);
+  max-width:420px;
+  margin:0 auto 2.5rem;
+  line-height:1.7;
+}
+.cta-email-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.82rem;
+  font-weight:500;
+  letter-spacing:0.04em;
+  color:var(--ink);
+  background:var(--txt);
+  padding:1rem 2.2rem;
+  border-radius:6px;
+  text-decoration:none;
+  transition:opacity 0.2s,transform 0.2s;
+}
+.cta-email-btn:hover{opacity:0.87;transform:translateY(-2px)}
+
+.cta-note{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;
+  color:var(--txt3);
+  margin-top:1.2rem;
+  letter-spacing:0.06em;
+}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--line);
+  padding:1.5rem 2rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
+  z-index:2;
+}
+.footer-l{
+  font-size:0.8rem;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  color:var(--txt2);
+  text-decoration:none;
+}
+.footer-r{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  color:var(--txt3);
+  letter-spacing:0.08em;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity 0.65s ease-out,transform 0.65s ease-out;
+}
+.reveal.on{opacity:1;transform:translateY(0)}
+
+/* MARQUEE */
+.marquee-wrap{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+  padding:0.8rem 0;
+  position:relative;
+  z-index:2;
+  background:var(--ink2);
+}
+.marquee-track{
+  display:flex;
+  animation:marq 25s linear infinite;
+  white-space:nowrap;
+}
+.marquee-item{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--txt3);
+  padding:0 2.5rem;
+  flex-shrink:0;
+}
+@keyframes marq{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* ABOUT SECTION — two col */
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5rem;
+  align-items:start;
+}
+.about-body{
+  font-size:0.9rem;
+  line-height:1.85;
+  color:var(--txt2);
+}
+.about-body p+p{margin-top:1.2rem}
+
+.accent-word{color:var(--txt);font-weight:600}
+
+@media(max-width:860px){
+  .bento{grid-template-columns:1fr 1fr;gap:1px}
+  .bc-1,.bc-2,.bc-3,.bc-4,.bc-5,.bc-6,.bc-7{grid-column:span 2}
+  .cred-grid{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap}
+  .hstat{border-right:none;border-bottom:1px solid var(--line);width:50%}
+  nav{padding:0 1.25rem}
+  .nav-link{display:none}
+  .section-wrap{padding:4rem 1.25rem}
+}
+@media(max-width:500px){
+  .hstat{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div id="spotlight"></div>
+
+<nav id="nav">
+  <a href="#" class="logo">
+    <span class="logo-dot"></span>
+    lence.io
+  </a>
+  <div class="nav-right">
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#experience" class="nav-link">Experience</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <a href="#contact" class="nav-btn">Get in touch →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Available for new engagements
+  </div>
+
+  <h1 class="hero-h1">
+    Your enterprise data,<br>
+    <span class="grad">AI-ready.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Senior-level AI architecture, SQL Server mastery, and cloud engineering — deployed for Fortune 500 organizations across the Pacific Northwest and beyond.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#contact" class="cta-primary">Start a project</a>
+    <a href="#services" class="cta-ghost">Explore services</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-n" data-count="20">0</div>
+      <div class="hstat-l">Years experience</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n">F500</div>
+      <div class="hstat-l">Client tier</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n">MCM</div>
+      <div class="hstat-l">SQL Server Master</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n" data-count="150">0</div>
+      <div class="hstat-l">Instances managed</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
+
+<div class="div"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap about-grid">
+    <div class="reveal">
+      <div class="s-label">About</div>
+      <h2 class="s-heading">Where deep SQL meets frontier AI.</h2>
+    </div>
+    <div class="reveal" style="transition-delay:0.1s">
+      <div class="about-body">
+        <p><span class="accent-word">Ryan Lence</span> is one of fewer than 300 people worldwide to hold the SQL Server Master Certification — an elite designation earned through hands-on expertise, not coursework.</p>
+        <p>Over the last four years at <span class="accent-word">Cohesity</span>, he's served as Senior Lead Architect driving AI deployments for Fortune 500 clients: RAG pipelines, LLM document intelligence, generative AI QA, and time-series forecasting for resource optimization.</p>
+        <p>Before AI, eight years building and running mission-critical SQL infrastructure for <span class="accent-word">healthcare operations</span> — 150+ SQL Server instances, 24×7 Tier 1 uptime, zero tolerance for failure.</p>
+        <p>lence.io brings that same level of rigor to every engagement. Senior technical partner, not a development shop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- SERVICES BENTO -->
+<section id="services">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="s-label">Services</div>
+      <h2 class="s-heading">Every layer of the stack.</h2>
+    </div>
+
+    <div class="bento reveal" style="transition-delay:0.1s">
+
+      <!-- BIG CARD: AI/RAG -->
+      <div class="bc bc-1 featured">
+        <div class="bc-num">01 — Primary</div>
+        <div class="bc-title">AI Architecture & RAG Systems</div>
+        <div class="bc-body">End-to-end design and deployment of Retrieval-Augmented Generation systems for enterprise document repositories. QOR optimization, LLM integration, and generative AI QA in production environments. Tiger Team leadership for AI compliance and governance.</div>
+        <div class="ai-terminal">
+          <div><span class="prompt">→</span> rag.pipeline.deploy(corpus=enterprise_docs)</div>
+          <div><span class="output">✓</span> Vector index built — 2.4M chunks indexed</div>
+          <div><span class="output">✓</span> QOR baseline: 91.4% relevance score</div>
+          <div><span class="prompt">→</span> llm.connect(model="gpt-4o", retriever=rag)</div>
+          <div><span class="output">✓</span> Production pipeline live</div>
+        </div>
+        <div class="bc-tags">
+          <span class="tag">LLM</span>
+          <span class="tag">RAG</span>
+          <span class="tag">Vector DB</span>
+          <span class="tag">Generative AI</span>
+          <span class="tag">QA/QOR</span>
+        </div>
+      </div>
+
+      <!-- SMALL CARD: SQL -->
+      <div class="bc bc-2">
+        <div class="bc-num">02</div>
+        <div class="bc-title">SQL Server & Data Engineering</div>
+        <div class="bc-body">Master-certified performance tuning, N-way clustering, HA/DR, and query optimization for multi-terabyte workloads.</div>
+        <div class="bc-tags">
+          <span class="tag">SQL Server</span>
+          <span class="tag">T-SQL</span>
+          <span class="tag">Clustering</span>
+        </div>
+      </div>
+
+      <!-- SMALL CARD: Cloud -->
+      <div class="bc bc-3">
+        <div class="bc-num">03</div>
+        <div class="bc-title">Cloud & Enterprise Architecture</div>
+        <div class="bc-body">Azure strategy, private/public hybrid design, and scalable infrastructure for Fortune 500-grade compliance requirements.</div>
+        <div class="bc-tags">
+          <span class="tag">Azure</span>
+          <span class="tag">VMware</span>
+          <span class="tag">Compliance</span>
+        </div>
+      </div>
+
+      <!-- SMALL CARD: ML -->
+      <div class="bc bc-4">
+        <div class="bc-num">04</div>
+        <div class="bc-title">Machine Learning & Forecasting</div>
+        <div class="bc-body">Time-series models for space management and resource optimization. Deep learning pipelines for operational intelligence.</div>
+        <div class="bc-tags">
+          <span class="tag">Time Series</span>
+          <span class="tag">PyTorch</span>
+          <span class="tag">MLOps</span>
+        </div>
+      </div>
+
+      <!-- WIDE CARD: Advisory -->
+      <div class="bc bc-6">
+        <div class="bc-num">05</div>
+        <div class="bc-title">Strategic Technical Advisory</div>
+        <div class="bc-body">Fractional CTO-level oversight for AI and data initiatives. Architecture reviews, vendor evaluation, compliance leadership, and engineering quality programs. The senior technical voice that most organizations are missing.</div>
+        <div class="bc-tags">
+          <span class="tag">Advisory</span>
+          <span class="tag">Governance</span>
+          <span class="tag">Architecture Review</span>
+          <span class="tag">Tiger Team</span>
+        </div>
+      </div>
+
+      <!-- FULL WIDTH CTA BENTO -->
+      <div class="bc bc-7" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;padding:1.75rem 2rem">
+        <div>
+          <div style="font-size:1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.3rem">Not sure where to start?</div>
+          <div style="font-size:0.82rem;color:var(--txt2)">Let's talk through your data and AI challenges — no pitch, just a direct technical conversation.</div>
+        </div>
+        <a href="#contact" class="cta-primary" style="flex-shrink:0">Schedule a call →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="s-label">Experience</div>
+      <h2 class="s-heading">Built in the field.</h2>
+    </div>
+
+    <div class="cred-grid reveal" style="transition-delay:0.1s;margin-top:3rem">
+
+      <div class="cred-card" style="grid-column:span 2">
+        <div class="cred-badge current">● Current</div>
+        <div class="cred-org">Cohesity</div>
+        <div class="cred-role">Senior Lead Architect — AI & Enterprise Solutions<br>Championing RAG pipelines, LLM deployments, generative AI QA, time-series forecasting, and cloud architecture for Fortune 500 clients. Tiger Team leader for AI and compliance.</div>
+        <div class="cred-period">Feb 2022 – Present · Greater Seattle Area (Hybrid)</div>
+      </div>
+
+      <div class="cred-card">
+        <div class="cred-badge past">Previous</div>
+        <div class="cred-org">Sound Physicians</div>
+        <div class="cred-role">Senior Database / Systems Architect<br>SQL Server 2019 cluster upgrades, Azure architecture and POC, HA/DR design, private/public cloud solutions.</div>
+        <div class="cred-period">Feb 2014 – Mar 2022 · Tacoma, WA</div>
+      </div>
+
+      <div class="cred-card">
+        <div class="cred-badge past">Previous</div>
+        <div class="cred-org">Intermountain Healthcare</div>
+        <div class="cred-role">Sr. Database Administrator — Consultant<br>150+ SQL Server instances supporting 24×7 clinical operations. Tier 1 performance tuning for GE, McKesson, Nuance, and Kronos applications.</div>
+        <div class="cred-period">Mar 2010 – Feb 2014</div>
+      </div>
+
+      <div class="cred-card" style="background:var(--ink3)">
+        <div class="cred-badge cert">★ Certification</div>
+        <div class="cred-org">SQL Server Master Certification</div>
+        <div class="cred-role">Microsoft Certified Master — SQL Server 2008. One of fewer than 300 awarded worldwide. The highest credential Microsoft issued for SQL Server expertise.</div>
+        <div class="cred-period">Lence Systems LLC · 2005 – 2022 independent consulting</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- SKILLS -->
+<section>
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="s-label">Expertise</div>
+      <h2 class="s-heading">Deep across the stack.</h2>
+    </div>
+    <div class="skills-cloud reveal" style="transition-delay:0.1s">
+      <span class="skill">Microsoft SQL Server</span>
+      <span class="skill">Large Language Models</span>
+      <span class="skill">RAG Pipelines</span>
+      <span class="skill">Generative AI</span>
+      <span class="skill">Machine Learning</span>
+      <span class="skill">Deep Learning</span>
+      <span class="skill">Time Series Forecasting</span>
+      <span class="skill">Azure Architecture</span>
+      <span class="skill">Enterprise HA/DR</span>
+      <span class="skill">Database Administration</span>
+      <span class="skill">Performance Tuning</span>
+      <span class="skill">N-Way Clustering</span>
+      <span class="skill">Python · PyTorch</span>
+      <span class="skill">VMware / Hyper-V</span>
+      <span class="skill">AI Governance</span>
+      <span class="skill">Cloud Architecture</span>
+      <span class="skill">T-SQL · PowerShell</span>
+      <span class="skill">Vector Databases</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact">
+  <div class="cta-wrap">
+    <div class="cta-glow-ring"></div>
+    <div class="s-label reveal" style="justify-content:center">
+      <span>Let's work together</span>
+    </div>
+    <h2 class="cta-h reveal" style="transition-delay:0.1s">
+      Ready to build<br>
+      <span class="grad">something serious?</span>
+    </h2>
+    <p class="cta-sub reveal" style="transition-delay:0.2s">
+      Enterprise AI, data architecture, SQL performance. Senior technical engagement — not a vendor relationship.
+    </p>
+    <div class="reveal" style="transition-delay:0.3s">
+      <a href="mailto:ryan@lence.io" class="cta-email-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="3.5" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M1 5l7 5 7-5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        ryan@lence.io
+      </a>
+      <div class="cta-note">Greater Seattle Area · Available for remote engagements</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="footer-l">lence.io</a>
+  <div class="footer-r">© 2025 Lence Systems LLC</div>
+</footer>
+
+<script>
+/* SPOTLIGHT */
+const spot=document.getElementById('spotlight');
+let shown=false;
+document.addEventListener('mousemove',e=>{
+  spot.style.left=e.clientX+'px';
+  spot.style.top=e.clientY+'px';
+  if(!shown){spot.style.opacity='1';shown=true}
+});
+
+/* NAV */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>40);
+},{ passive:true });
+
+/* MARQUEE */
+const items=['Enterprise AI','SQL Server MCM','RAG Systems','Fortune 500','Azure Architecture','LLM Integration','Deep Learning','Performance Tuning','Time Series','HA / DR','Generative AI','Data Engineering','Cloud Architecture'];
+const track=document.getElementById('mtrack');
+const all=[...items,...items];
+track.innerHTML=all.map(t=>`<span class="marquee-item">${t}</span>`).join('');
+
+/* BENTO MOUSE GLOW */
+document.querySelectorAll('.bc').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width*100).toFixed(1)+'%';
+    const y=((e.clientY-r.top)/r.height*100).toFixed(1)+'%';
+    card.style.setProperty('--mx',x);
+    card.style.setProperty('--my',y);
+  });
+});
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target)}
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* COUNT-UP */
+function countUp(el,target,duration){
+  const start=performance.now();
+  const update=now=>{
+    const t=Math.min((now-start)/duration,1);
+    const val=Math.round(t*target);
+    el.textContent=val+(target>=20&&target<50?'+':target>=50?'+':'');
+    if(t<1)requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+const countObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const target=+e.target.dataset.count;
+      if(target)countUp(e.target,target,1400);
+      countObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('[data-count]').forEach(el=>countObs.observe(el));
+</script>
+</body>
+</html>
