@@ -345,7 +345,7 @@ section{position:relative;z-index:2}
 .bc-1{grid-column:span 4}
 .bc-2{grid-column:span 2}
 .bc-3{grid-column:span 2}
-.bc-4{grid-column:span 2}
+.bc-4{grid-column:span 4}
 .bc-5{grid-column:span 2}
 .bc-6{grid-column:span 4}
 .bc-7{grid-column:span 6}
@@ -396,6 +396,45 @@ section{position:relative;z-index:2}
   padding:0.2rem 0.5rem;
   border-radius:3px;
 }
+
+/* OPEN MODELS — Hugging Face links inside ML card */
+.hf-models{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:0.6rem;
+  margin-top:1.4rem;
+}
+.hf-model{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  background:var(--ink);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:0.8rem 1rem;
+  transition:border-color 0.2s;
+  position:relative;
+  z-index:1;
+}
+.hf-model:hover{border-color:var(--accent2)}
+.hf-model-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem;
+  color:var(--accent);
+  margin-bottom:0.3rem;
+}
+.hf-model-desc{font-size:0.75rem;line-height:1.55;color:var(--txt2)}
+.hf-link{
+  display:inline-block;
+  margin-top:1rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;
+  color:var(--accent);
+  text-decoration:none;
+  position:relative;
+  z-index:1;
+}
+.hf-link:hover{text-decoration:underline}
 
 /* FEATURED CARD */
 .bc.featured{
@@ -809,13 +848,25 @@ footer{
       </div>
 
       <!-- SMALL CARD: ML — widened to close the row's grid gap -->
-      <div class="bc bc-4" style="grid-column:span 4">
+      <div class="bc bc-4">
         <div class="bc-num">04</div>
         <div class="bc-title">Machine Learning & Forecasting</div>
-        <div class="bc-body">Time-series models for space management and resource optimization. Deep learning pipelines for operational intelligence.</div>
+        <div class="bc-body">Time-series models for space management and resource optimization. Deep learning pipelines for operational intelligence. We also train and publish our own open models.</div>
+        <div class="hf-models">
+          <a class="hf-model" href="https://huggingface.co/MyLabs-LLC/Axion-1B-FineWebEdu-200K" target="_blank" rel="noopener">
+            <div class="hf-model-name">Axion-1B</div>
+            <div class="hf-model-desc">1.3B-parameter language model pretrained from scratch on FineWeb-Edu. 32K context, custom architecture.</div>
+          </a>
+          <a class="hf-model" href="https://huggingface.co/MyLabs-LLC/pii-master-ner-l" target="_blank" rel="noopener">
+            <div class="hf-model-name">pii-master-ner</div>
+            <div class="hf-model-desc">PII / PHI detector mapped to HIPAA Safe Harbor types. 99.8% document-level recall on a single CPU core.</div>
+          </a>
+        </div>
+        <a class="hf-link" href="https://huggingface.co/MyLabs-LLC" target="_blank" rel="noopener">Our work on Hugging Face →</a>
         <div class="bc-tags">
           <span class="tag">Time Series</span>
           <span class="tag">PyTorch</span>
+          <span class="tag">LLM Pretraining</span>
           <span class="tag">MLOps</span>
         </div>
       </div>
